@@ -45,6 +45,8 @@ public class Login extends javax.swing.JPanel {
             }
         });
 
+        txt_User.setText("Matthew");
+
         btn_Volver.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btn_Volver.setText("Volver");
         btn_Volver.addActionListener(new java.awt.event.ActionListener() {
@@ -59,12 +61,9 @@ public class Login extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(247, 247, 247)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txt_User, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txt_User, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(271, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -74,7 +73,10 @@ public class Login extends javax.swing.JPanel {
                         .addGap(387, 387, 387))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btn_Volver)
-                        .addGap(141, 141, 141))))
+                        .addGap(141, 141, 141))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(352, 352, 352))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,9 +87,9 @@ public class Login extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txt_User, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                .addGap(123, 123, 123)
                 .addComponent(jButton1)
-                .addGap(86, 86, 86)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
                 .addComponent(btn_Volver)
                 .addGap(54, 54, 54))
         );
@@ -106,7 +108,10 @@ public class Login extends javax.swing.JPanel {
             ventana = panelControl.getPanelBiblioteca();
             panelControl.getMain().getVentanaBase().cambiarPaneles(ventana);
         }else{
-            JOptionPane.showMessageDialog(null, "Este usuario no éxiste");
+            JOptionPane.showMessageDialog(null, "Este usuario no éxiste, se creara tu usuario, accede a el como: *" + nombre + "* recuerdalo!!");            
+            userControl.createUsers(nombre);
+            ventana = panelControl.getPanelBiblioteca();
+            panelControl.getMain().getVentanaBase().cambiarPaneles(ventana);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
