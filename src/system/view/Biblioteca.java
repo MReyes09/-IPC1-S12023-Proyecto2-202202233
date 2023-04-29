@@ -7,10 +7,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import system.beam.Categoria;
-import system.beam.Usuario;
+import system.beam.Imagen;
 import system.controller.CategoriaController;
+import system.controller.ListaDobleEnlazadaImagen;
+import system.controller.ListaSimpleUsuario;
 import system.controller.PanelController;
-import system.controller.UserController;
+import system.nodos.NodoDobleImagen;
 
 /**
  * @author matth
@@ -18,13 +20,16 @@ import system.controller.UserController;
 public class Biblioteca extends javax.swing.JPanel {
     javax.swing.JPanel ventana;
     PanelController panelControl = new PanelController();
-    UserController userControl = new UserController();
+    ListaSimpleUsuario lsU = new ListaSimpleUsuario();
     CategoriaController cateControl = new CategoriaController();
+    ListaDobleEnlazadaImagen ldI = new ListaDobleEnlazadaImagen();
+    static ArrayList<Imagen> listaImagenes = new ArrayList<Imagen>();
     
     public Biblioteca() {
         initComponents();
-        lbl_User.setText(userControl.getUserLoged().getNombre());
+        lbl_User.setText(lsU.getUserLoged());
         setDataCategory();
+        setDataImages();
     }
     
     @SuppressWarnings("unchecked")
@@ -42,7 +47,7 @@ public class Biblioteca extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmb_Imagenes = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -139,7 +144,7 @@ public class Biblioteca extends javax.swing.JPanel {
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setText("Eliminar Imagen");
 
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cmb_Imagenes.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -159,7 +164,7 @@ public class Biblioteca extends javax.swing.JPanel {
                 .addContainerGap(52, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmb_Imagenes, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(46, 46, 46))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel3)
@@ -171,7 +176,7 @@ public class Biblioteca extends javax.swing.JPanel {
                 .addContainerGap(8, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cmb_Imagenes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -218,29 +223,38 @@ public class Biblioteca extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SalirActionPerformed
-        ventana = panelControl.getPanelMenuInicio();
+        ventana = panelControl.getPanelLogin();
         panelControl.getMain().getVentanaBase().cambiarPaneles(ventana);
     }//GEN-LAST:event_btn_SalirActionPerformed
 
     private void cmb_CategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_CategoriaActionPerformed
-        // TODO add your handling code here:
+        setDataImages();
     }//GEN-LAST:event_cmb_CategoriaActionPerformed
 
     private void btn_AgregarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AgregarCActionPerformed
-        Usuario userLoged = userControl.getUserLoged();
+        String nameUser = lsU.getUserLoged();
         String nombreCategoria = JOptionPane.showInputDialog(this, "Ingrese el nombre de la categoría:");
         if (nombreCategoria != null && !nombreCategoria.isEmpty()) {
-            cateControl.crearCategoria(userLoged.getNombre(),nombreCategoria);
-            setDataCategory();
+            cateControl.crearCategoria(nameUser,nombreCategoria);
+            cmb_Categoria.addItem(nombreCategoria);
             JOptionPane.showMessageDialog(null, "Se creo con exito");
         }
     }//GEN-LAST:event_btn_AgregarCActionPerformed
 
     private void btn_EliminarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EliminarCActionPerformed
-        String categoria = cmb_Categoria.getSelectedItem().toString();
-        Usuario userLoged = userControl.getUserLoged();
-        cateControl.eliminarCategoria(userLoged.getNombre(), categoria);
-        setDataCategory();
+        String nombreCategoria = cmb_Categoria.getSelectedItem().toString();
+        int i = cmb_Categoria.getSelectedIndex();
+        String nameUser = lsU.getUserLoged();
+        cateControl.eliminarCategoria(nameUser, nombreCategoria);
+        try{
+            cmb_Categoria.removeItemAt(i);
+            if(cmb_Categoria.getItemCount() == 0){
+                setDataCategory();
+            }
+        }catch(NullPointerException e){
+            System.out.println("Se han elinado todas las categorias, categoria General creada pero vacia");
+        }
+        
         JOptionPane.showMessageDialog(null, "Se ha eliminado con exito");
     }//GEN-LAST:event_btn_EliminarCActionPerformed
 
@@ -253,31 +267,51 @@ public class Biblioteca extends javax.swing.JPanel {
         UIManager.put("FileChooser.approveButtonForeground", Color.WHITE);
         if(jf.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
             java.io.File[] selectedFiles = jf.getSelectedFiles();
-            System.out.println("Archivos seleccionados:");
-            for (java.io.File selectedFile : selectedFiles) {
-                System.out.println(selectedFile.getName()+" "+selectedFile.getAbsolutePath());
+            for (java.io.File selectedFile : selectedFiles) {                
+                String ruta = selectedFile.getAbsolutePath();
+                String nombre = selectedFile.getName();
+                String categoria = cmb_Categoria.getSelectedItem().toString();
+                Imagen guardarImagen = new Imagen(ruta,nombre);
+                ldI.addImage(guardarImagen,categoria);
+                setDataImages();
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void setDataCategory(){
-        cmb_Categoria.removeAllItems();
+        listaImagenes.removeAll(listaImagenes);
         ArrayList<Categoria> categorias = new ArrayList<Categoria>();
         categorias = cateControl.obtenerCategorias();
-        Usuario userLoged = userControl.getUserLoged();
+        String nombreUsuario = lsU.getUserLoged();
         int entradas = 0;
         if(categorias != null){
             for(int i = 0; i < categorias.size(); i++){
             String nombreCategoria = categorias.get(i).getNombreCategoria();
-                if(categorias.get(i).getNameUser().equals(userLoged.getNombre())){
+                if(categorias.get(i).getNameUser().equals(nombreUsuario)){
                     cmb_Categoria.addItem(nombreCategoria);
                     entradas = entradas + 1;
                 }
             }
         }
         if(entradas == 0 ){
-            cateControl.crearCategoria(userLoged.getNombre(), "General");
+            cateControl.crearCategoria(nombreUsuario, "General");
             cmb_Categoria.addItem("General");
+        }
+    }
+    
+    private void setDataImages(){
+        cmb_Imagenes.removeAllItems();
+        listaImagenes.removeAll(listaImagenes);
+        String categoriaSeleccionada = cmb_Categoria.getSelectedItem().toString();
+        String nombreUsuario = lsU.getUserLoged();
+        ArrayList<Categoria> categorias = new ArrayList<Categoria>();
+        categorias = cateControl.obtenerCategorias();
+        listaImagenes = ldI.listarImagenes(categoriaSeleccionada, nombreUsuario);
+        if(listaImagenes != null){
+            for(int i = 0; i < listaImagenes.size(); i++){
+                String nombreImagen = listaImagenes.get(i).getNombre();
+                cmb_Imagenes.addItem(nombreImagen);
+            }
         }
     }
 
@@ -286,9 +320,9 @@ public class Biblioteca extends javax.swing.JPanel {
     private javax.swing.JButton btn_EliminarC;
     private javax.swing.JButton btn_Salir;
     private javax.swing.JComboBox<String> cmb_Categoria;
+    private javax.swing.JComboBox<String> cmb_Imagenes;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

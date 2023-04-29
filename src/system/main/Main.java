@@ -1,8 +1,10 @@
 
 package system.main;
 
-import system.controller.UserController;
+import system.beam.Usuario;
+import system.nodos.NodeUser;
 import system.view.VentanaBase;
+import system.controller.ListaSimpleUsuario;
 
 /**
  * @author matth
@@ -12,8 +14,9 @@ public class Main {
     static VentanaBase ventanaBase = new VentanaBase();
     
     public static void main(String[] args) {
-        UserController usu = new UserController();
-        usu.createFirstUser();
+        ListaSimpleUsuario lsu = new ListaSimpleUsuario();
+        Usuario addUser = new Usuario("Matthew");
+        lsu.add(addUser);
         ventanaBase.setVisible(true);
         ventanaBase.setLocationRelativeTo(null);
     }

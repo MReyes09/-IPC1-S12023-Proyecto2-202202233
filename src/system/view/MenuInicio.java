@@ -73,8 +73,8 @@ public class MenuInicio extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_EditorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EditorActionPerformed
-        ventana = panelControl.getPanelLogin();
-        panelControl.getMain().getVentanaBase().cambiarPaneles(ventana);
+//        ventana = panelControl.getPanelLogin();
+//        panelControl.getMain().getVentanaBase().cambiarPaneles(ventana);
     }//GEN-LAST:event_btn_EditorActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

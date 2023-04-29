@@ -13,7 +13,7 @@ public class VentanaBase extends javax.swing.JFrame {
     
     public VentanaBase() {
         initComponents();
-        ventana = panelControl.getPanelMenuInicio();
+        ventana = panelControl.getPanelLogin();
         cambiarPaneles(ventana);
     }
 

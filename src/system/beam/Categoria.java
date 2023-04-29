@@ -1,7 +1,7 @@
 
 package system.beam;
 
-import java.util.ArrayList;
+import system.nodos.NodoDobleImagen;
 
 /**
  * @author matth
@@ -10,38 +10,38 @@ import java.util.ArrayList;
 public class Categoria {
     private String nameUser;
     private String nombreCategoria;
-    private ArrayList<Imagen> imagenes;
+    private NodoDobleImagen imagenes;
 
     public Categoria() {
     }
 
-    public Categoria(String nameUser, String nombreCategoria) {
+    public Categoria(String nameUser, String nombreCategoria, NodoDobleImagen imagen) {
         this.nameUser = nameUser;
         this.nombreCategoria = nombreCategoria;
-        this.imagenes = new ArrayList<Imagen>();
+        this.imagenes = imagen;
     }
 
     public String getNameUser() {
         return nameUser;
     }
 
-    public void setNameUser(String nameUser) {
-        this.nameUser = nameUser;
-    }
-
     public String getNombreCategoria() {
         return nombreCategoria;
     }
 
-    public void setNombreCategoria(String nombreCategoria) {
-        this.nombreCategoria = nombreCategoria;
-    }    
-
-    public ArrayList<Imagen> getImagenes() {
+    public NodoDobleImagen getImagenes() {
         return imagenes;
     }
 
-    public void setImagenes(ArrayList<Imagen> imagenes) {
+    public void setNameUser(String nameUser) {
+        this.nameUser = nameUser;
+    }
+
+    public void setNombreCategoria(String nombreCategoria) {
+        this.nombreCategoria = nombreCategoria;
+    }
+
+    public void setImagenes(NodoDobleImagen imagenes) {
         this.imagenes = imagenes;
     }
 }
