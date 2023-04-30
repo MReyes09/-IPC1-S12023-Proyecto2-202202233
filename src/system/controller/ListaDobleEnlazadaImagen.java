@@ -112,7 +112,70 @@ public class ListaDobleEnlazadaImagen extends EstructuraDeDatos{
 
     @Override
     public void delete(Object e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<String> listaOb = (ArrayList<String>)e;
+        String categoriaABuscar = listaOb.get(0);
+        String imagenABuscar = listaOb.get(1);
+        String userLoged = lsU.getUserLoged();
+        ArrayList<Categoria> categorias = categoryControl.obtenerCategorias();
+        
+        for(int i =0; i < categorias.size(); i++){
+            String categoriaObtenida = categorias.get(i).getNombreCategoria();
+            String usuarioPertenece = categorias.get(i).getNameUser();
+            if(categoriaObtenida.equals(categoriaABuscar)){
+                if(usuarioPertenece.equals(userLoged)){
+                    NodoDobleImagen temporal = categorias.get(i).getImagenes();//Nodo inicial
+                    boolean finded = false;
+                    Categoria categoriaNueva = new Categoria();
+                    while(finded == false){
+                        String imagenEncontrada = temporal.getImagen().getNombre();
+                        if(imagenEncontrada.equals(imagenABuscar)){
+                            if(temporal.getAnterior() == null && temporal.getSiguiente() != null){
+                                categoriaNueva.setNameUser(usuarioPertenece);
+                                categoriaNueva.setNombreCategoria(categoriaObtenida);
+                                NodoDobleImagen imagenNueva = temporal.getSiguiente();
+                                imagenNueva.setAnterior(null);
+                                categoriaNueva.setImagenes(imagenNueva);
+                                categoryControl.actualizar(categoriaNueva);
+                                finded = true;
+                            }else if(temporal.getAnterior() == null && temporal.getSiguiente() == null){//Ultimo que queda
+                                categoriaNueva.setNameUser(usuarioPertenece);
+                                categoriaNueva.setNombreCategoria(categoriaObtenida);
+                                categoriaNueva.setImagenes(null);
+                                categoryControl.actualizar(categoriaNueva);
+                                finded = true;
+                            }else if(temporal.getSiguiente() == null ){//es el ultimo
+                                categoriaNueva.setNameUser(usuarioPertenece);
+                                categoriaNueva.setNombreCategoria(categoriaObtenida);
+                                temporal = temporal.getAnterior();
+                                temporal.setSiguiete(null);
+                                
+                                while(temporal.getAnterior() != null){
+                                    temporal = temporal.getAnterior();
+                                }
+                                categoriaNueva.setImagenes(temporal);
+                                categoryControl.actualizar(categoriaNueva);
+                                finded = true;
+                            }else if(temporal.getSiguiente() != null){
+                                categoriaNueva.setNameUser(usuarioPertenece);
+                                categoriaNueva.setNombreCategoria(categoriaObtenida);
+                                NodoDobleImagen imagenSiguiente = temporal.getSiguiente();
+                                temporal = temporal.getAnterior();
+                                imagenSiguiente.setAnterior(temporal);
+                                temporal.setSiguiete(imagenSiguiente);
+                                while(temporal.getAnterior() != null){
+                                    temporal = temporal.getAnterior();
+                                }
+                                categoriaNueva.setImagenes(temporal);
+                                categoryControl.actualizar(categoriaNueva);
+                                finded = true;
+                            }
+                        }else{
+                            temporal = temporal.getSiguiente();
+                        }
+                    }
+                }
+            }
+        }        
     }
     
 }
